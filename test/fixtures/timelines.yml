@@ -1,0 +1,11 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  description: MyString
+  hours_spent: 1
+  started_on: 2010-06-21 23:57:57
+
+two:
+  description: MyString
+  hours_spent: 1
+  started_on: 2010-06-21 23:57:57

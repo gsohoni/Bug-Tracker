@@ -1,0 +1,24 @@
+<h1>Editing timeline</h1>
+
+<% form_for(@timeline) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :description %><br />
+    <%= f.text_field :description %>
+  </p>
+  <p>
+    <%= f.label :hours_spent %><br />
+    <%= f.text_field :hours_spent %>
+  </p>
+  <p>
+    <%= f.label :started_on %><br />
+    <%= f.datetime_select :started_on %>
+  </p>
+  <p>
+    <%= f.submit 'Update' %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @timeline %> |
+<%= link_to 'Back', timelines_path %>

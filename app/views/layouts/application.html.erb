@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+	<title><%= controller_name %></title>
+    <%= stylesheet_link_tag 'application' %>
+    <%= javascript_include_tag :all %>
+  </head>
+  <body>
+	<h1 style="text-align:center;">TMS - Ticket Management System</h1>
+	<div id="header_div">
+		<% if logged_in? %>
+			Welcome aboard <strong><%= current_user.login.capitalize %></strong><p>
+			<%= link_to "Home #{image_tag('house.png')}", root_path %> | <%= link_to "Logout #{image_tag('door_in.png')}", logout_path %>
+
+		<% else %>
+			<%= link_to "Login #{image_tag('login.jpg')}", login_path %> | <%= link_to "SignUp #{image_tag('register.jpg')}", signup_path %>
+		<% end %>
+	</div>	
+    <p style="color:green"><%= flash[:notice] %></p>
+    <p style="color:red"><%= flash[:error]%></p>
+    <%= yield %>
+  </body>
+</html>

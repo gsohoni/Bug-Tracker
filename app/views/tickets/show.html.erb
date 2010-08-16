@@ -1,0 +1,86 @@
+<p>
+  <b>Title:</b>
+  <%=h @ticket.title %>
+</p>
+
+<p>
+  <b>Desciption:</b>
+  <%=h @ticket.desciption %>
+</p>
+
+<p>
+  <b>Priority:</b>
+  <%=h @ticket.priority %>
+</p>
+
+<% if @ticket_docs.size > 0 %>
+ <p>This ticket has <%= @ticket_docs.size %> attachments. <%= link_to_function 'Show Attachments', visual_effect(:toggle_slide, 'attachment_list') %>
+	<div id='attachment_list' style="display:none;">
+		<table border=1px;  cellspacing=0px>
+			<tr style="background: #CFCCCC;"><th>File Name</th><th>File Description</th><th>Uploaded On</th><th>Document Type</th><th>&nbsp;</th><th>&nbsp;</th></tr>
+		<% for @doc in @ticket_docs %>
+			<tr class="<%= cycle('odd','even') %>"> 
+				<td><%= @doc.doc_file_name %></td>
+				<td><%= @doc.doc_description %></td>
+				<td><%= format_date(@doc.updated_at) %></td>
+				<td><%= @doc.doc_content_type %></td>
+				<td><%= link_to image_tag('download.jpg', :alt => 'Download'), document_path(@doc) %></td>
+				<td><%= link_to image_tag('delete.png', :alt => 'Delete'), document_path(@doc, :ticket_id => @ticket), :method => :delete, :confirm => "Deleting #{@doc.doc_file_name}. Sure?" %></td>
+			</tr>
+		<% end %>
+		</table>
+	</div>
+<% else %>
+ <p>No documents attached! Click 'Attach File' below to add attachments!
+<% end %>
+
+<% if @ticket_timelines.size > 0 %>
+ <p>This ticket has <%= @ticket_timelines.size %> time entries. Total Hours spent: <strong><%= @ticket_timelines.sum(:hours_spent) %></strong>. <%= link_to_function 'Show Time Entries', visual_effect(:toggle_slide, 'timeline_list') %>
+	<div id='timeline_list' style="display:none;">
+		<table border=1px;  cellspacing=0px>
+			<tr style="background: #CFCCCC;"><th>Entry Description</th><th>Hours Spent</th><th>Started On</th><th>&nbsp;</th></tr>
+		<% for @timeline_entry in @ticket_timelines %>
+			<tr class="<%= cycle('odd','even') %>"> 
+				<td><%= @timeline_entry.description %></td>
+				<td><%= @timeline_entry.hours_spent %></td>
+				<td><%= format_date(@timeline_entry.started_on) %></td>
+				<td><%= link_to image_tag('delete.png'), timeline_path(@timeline_entry), :method => :delete, :confirm => "Deleting '#{@timeline_entry.description}'. Sure?" %></td>
+			</tr>
+		<% end %>
+		</table>
+	</div>
+<% else %>
+ <p>No timelines entered! Click 'Enter Time Spent' below to add time entries!
+<% end %>
+
+<table>
+	<tr>
+		<td><%= link_to_function 'Attach File', visual_effect(:toggle_slide, 'file_upload_form') %>
+	<%= link_to_function image_tag('attach.png', :size => '24x24'), visual_effect(:toggle_slide, 'file_upload_form') %></td>
+		<td><%= link_to_function 'Enter Time Spent', visual_effect(:toggle_slide, 'time_spent_form') %>
+	<%= link_to_function image_tag('clock.jpg', :size => '24x24'), visual_effect(:toggle_slide, 'time_spent_form') %></td>
+	</tr>
+</table>
+<div id='file_upload_form' style="display:none;">
+  <% form_for :document, @document, :url => documents_path(:ticket_id => @ticket), :html => { :multipart => true } do |form| %>
+	<%= form.label :file %>
+    <%= form.file_field :doc %>
+	<%= form.label :description %>
+	<%= form.text_field :doc_description %>
+	<%= submit_tag 'Upload'%>
+  <% end %>
+</div>
+
+<div id='time_spent_form' style="display:none;">
+  <% form_for :timeline, @timeline, :url => timelines_path(:ticket_id => @ticket) do |form| %>
+	<%= form.label :description %>
+    <%= form.text_field :description %>
+	<%= form.label :hours_spent %>
+	<%= form.text_field :hours_spent %>
+	<p><%= form.label :started_on %>
+	<%= form.datetime_select :started_on %>
+	<%= submit_tag 'Submit'%>
+  <% end %>
+</div>
+
+<p><%= link_to image_tag('back.png'), tickets_path %> | <%= link_to image_tag('pencil.png'), edit_ticket_path(@ticket) %>

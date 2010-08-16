@@ -1,0 +1,34 @@
+<% if logged_in? %>
+	Ticket Information:
+	<p>
+	You have <%= current_user.assigned_tickets.count %> tickets assigned!
+	<p>
+	You have reported <%= current_user.reported_tickets.count %> tickets! 
+	<p>
+	<p><%= link_to 'View Tickets', my_tickets_path %> | <%= link_to 'New Ticket', new_ticket_path %>
+		
+	<h2>Listing tickets</h2>
+
+	<table border=1px;  cellspacing=0px>
+	  <tr style="background: #CFCCCC;">
+	    <th>Title</th>
+	    <th>Description</th>
+	    <th>Priority</th>
+		<th colspan=3>Actions</th>
+	  </tr>
+
+	<% @tickets.each do |ticket| %>
+	  <tr class="<%= cycle('odd','even') %>">
+	    <td><%=h ticket.title %></td>
+	    <td><%=h ticket.desciption %></td>
+	    <td><%=h ticket.priority %></td>
+	    <td><%= link_to image_tag('view.png'), ticket %></td>
+	    <td><%= link_to image_tag('pencil.png'), edit_ticket_path(ticket) %></td>
+	    <td><%= link_to image_tag('delete.png'), ticket, :confirm => 'Are you sure?', :method => :delete %></td>
+	  </tr>
+	<% end %>
+	</table>
+<% end %>
+
+
+	

@@ -1,0 +1,5 @@
+<h1>What Time is it?</h1>
+
+<div id="check_time">
+	<%= link_to_remote 'Click to get current time', :update => 'check_time', :url => {:action => 'check_time'}, :position => 'after' %>
+</div>
